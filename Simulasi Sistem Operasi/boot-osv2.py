@@ -63,6 +63,7 @@ def list_to_string(lst):
 
 
 def os_booting():
+    print('\033[H\033[2J', end="")
     global OS_NAME
     with open('credentials.txt') as f:
         OS_NAME = f.read().split(',')[2]

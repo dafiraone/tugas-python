@@ -1,0 +1,1 @@
+jalankan 'pip install -r requirements.txt' di terminal

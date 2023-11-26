@@ -137,7 +137,7 @@ while True:
             print(f'{str_command} bukan perintah yang valid!')
             continue
     
-    if list_to_string(command_input) in [c for c in COMMAND]:
+    if list_to_string(command_input).lower() in [c for c in COMMAND]:
         if command_input[0].lower() == 'help':
             for c in COMMAND:
                 print(f'{c}'.ljust(30), end='')

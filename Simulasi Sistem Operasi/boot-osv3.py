@@ -33,9 +33,10 @@ COMMAND = {
     'shutdown' : 'Mematikan komputer',
     'author' : 'Menampilkan informasi pengembang',
     'dir' : 'Menampilkan direktori',
+    'dir make file' : 'Membuat file di direktori yang dituju',
+    'dir make folder' : 'Membuat folder di direktori yang dituju',
     'dir {directory}' : 'Lihat direktori yang dituju. contoh: folder1/folder2',
     'dir del {directory}' : 'Menghapus direktori yang dituju',
-    'dir make {directory}' : 'Membuat direktori ke direktori yang dituju. format: Nama direktori, jenis (F untuk file, FD untuk folder)',
 }
 
 PC_INFO = {
@@ -196,21 +197,28 @@ while True:
         elif len(command_input) > 2:
             if command_input[1] == 'del':
                 CURDIR = command_input[2].split('/')
-                delete_dir(DIRECTORY, CURDIR)
+                delete_dir(DIRECTORY['root'], CURDIR)
                 with open('directory.json', 'w') as json_f:
                     json.dump(DIRECTORY, json_f, indent=4)
                 print(f'{command_input[2]} berhasil dihapus')
 
             if command_input[1] == 'make':
-                CURDIR = command_input[2].split('/')
-                new_dir = input('Nama direktori, jenis : ')
-                new_dir = new_dir.split(',')
-                if new_dir == 'F':
-                    new_dir[1] = True
-                elif new_dir == 'FD':
-                    new_dir[1] = False
-                CURDIR.append(new_dir[0])
-                make_dir(DIRECTORY, CURDIR, new_dir[1])
+                CURDIR = []
+                if command_input[2] == 'file':
+                    CURDIR = input("Masukkan path direktori gunakan '/': ")
+                    CURDIR = CURDIR.split('/')
+                    input_dir = input('Nama File : ')
+                    CURDIR.append(input_dir)
+                    make_dir(DIRECTORY, CURDIR, True)
+                elif command_input[2] == 'folder':
+                    CURDIR = input("Masukkan path direktori gunakan '/': ")
+                    CURDIR = CURDIR.split('/')
+                    input_dir = input('Nama Folder : ')
+                    CURDIR.append(input_dir)
+                    make_dir(DIRECTORY, CURDIR, False)
+                else:
+                    print('Hanya bisa melakukan operasi ke file/folder')
+                    continue
                 with open('directory.json', 'w') as json_f:
                     json.dump(DIRECTORY, json_f, indent=4)
                 print(f'{command_input[2]} berhasil dibuat')

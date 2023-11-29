@@ -1,107 +1,233 @@
-# from time import sleep
-# from art import *
-# from random import randrange
-# from getpass import getpass
+from time import sleep
+from art import *
+from random import randrange
+from getpass import getpass
+from datasource import *
+from directory_func import *
+from datetime import datetime
+import timeit
 
-# class console_colors:
-#     OKGREEN = '\033[92m'
-#     WARNING = '\033[93m'
-#     FAIL = '\033[91m'
-#     BOLD = '\033[1m'
-#     UNDERLINE = '\033[4m'
-#     ENDC = '\033[0m'
+def loading_ok(message):
+    for i in range(101):
+        print(f'{message}'.ljust(40), end='')
+        print(f'{i}'.rjust(10), end='')
+        print('%', end='')
+        if i < 10:
+            print('\b\b', end='\r')
+        elif i > 99:
+            print(f'\b\b\b\b  {console_colors.GREEN}{console_colors.BOLD}{console_colors.UNDERLINE}OK{console_colors.ENDC}'.rjust(10))
+        else:
+            print('\b\b\b', end='\r')
+        sleep(randrange(1, 8)/100)
 
-# COMMAND = {
-#     'help' : {'deskripsi' : 'Dokumentasi setiap perintah'},
-#     'os' : {'deskripsi' : 'Melihat informasi sistem operasi'},
-#     'os name' : {'deskripsi' : 'Melihat nama sistem operasi'},
-#     'os fancyname' : {'deskripsi' : 'Melihat nama sistem operasi dengan ASCII Art'},
-#     'reboot' : {'deskripsi' : 'Boot ulang komputer'},
-#     'shutdown' : {'deskripsi' : 'Mematikan komputer'},
-#     'author' : {'deskripsi' : 'Menampilkan informasi pengembang'},
-#     'exit' : {'deskripsi' : 'Matikan komputer'},
-# }
+def loading_rotate(message):
+    for _ in range(randrange(3, 8)):
+        print(f'{message} |', end='\r')
+        sleep(0.1)
+        print(f'{message} /', end='\r')
+        sleep(0.1)
+        print(f'{message} -', end='\r')
+        sleep(0.1)
+        print(f'{message} \\', end='\r')
+        sleep(0.1)
 
-# def loading(message):
-#     for i in range(101):
-#         print(f'{message}'.ljust(40), end='')
-#         print(f'{i}'.rjust(10), end='')
-#         print('%', end='')
-#         if i < 10:
-#             print('\b\b', end='\r')
-#         elif i > 99:
-#             print(f'\b\b\b\b  {console_colors.OKGREEN}{console_colors.BOLD}{console_colors.UNDERLINE}OK{console_colors.ENDC}'.rjust(10))
-#         else:
-#             print('\b\b\b', end='\r')
-#         sleep(randrange(1, 8)/100)
+def list_to_string(lst):
+    new_string = ''
+    for c in lst:
+        new_string += c + ' '
+    return new_string[:-1]
 
-# def os_booting():
-#     tprint(os_name, 'larry3d')
-#     sleep(0.3)
-#     print('Starting Power-On Self-Test (POST)')
-#     # loading('RAM Test')
-#     # loading('Storage Drive Test')
-#     # loading('Graphic Card Test')
-#     # loading('USB Port Test')
+def os_booting():
+    print('\033[H\033[2J', end="")
+    global OS_NAME
+    tprint(OS_NAME, 'larry3d')
+    sleep(0.3)
+    print('Starting Power-On Self-Test (POST)')
+    loading_ok('Verifying CPU')
+    loading_ok('Motherboard Test')
+    loading_ok('PCI Bus Test')
+    loading_ok('RAM Test')
+    loading_ok('Storage Drive Test')
+    loading_ok('Graphic Card Test')
+    loading_ok('I/O Port Test')
 
-#     for _ in range(randrange(1, 7)):
-#         print('Booting OS |', end='\r')
-#         sleep(0.1)
-#         print('Booting OS /', end='\r')
-#         sleep(0.1)
-#         print('Booting OS -', end='\r')
-#         sleep(0.1)
-#         print('Booting OS \\', end='\r')
-#         sleep(0.1)
-#     else:
-#         print(f'{console_colors.OKGREEN}{console_colors.BOLD}{console_colors.UNDERLINE}Booting Success!{console_colors.ENDC}'.rjust(10))
-#         sleep(0.5)
-#         print('\nKetik help untuk melihat perintah yang tersedia\n')
+    loading_rotate('Booting OS')
+    print(f'{console_colors.GREEN}{console_colors.BOLD}{console_colors.UNDERLINE}Booting Success!{console_colors.ENDC}'.rjust(10))
+    sleep(0.5)
 
-# os_name = 'PY.OS'
+    for login_chance in range(2, -1, -1):
+        global USERNAME
+        global PASSWORD
+        cred_username = input('Username : ')
+        cred_password = getpass('Password : ')
+        cred_username = USERNAME
+        cred_password = PASSWORD
 
-# os_booting()
+        if cred_username != USERNAME or cred_password != PASSWORD:
+            print('Username / Password Salah')
+            print('Kesempatan login : ' + str(login_chance))
+        else:
+            print('\nLogin berhasil')
+            print(f'Halo, {console_colors.BOLD}{USERNAME}{console_colors.ENDC}')
+            break
+        if login_chance == 0:
+            global SYSTEM_ON
+            SYSTEM_ON = False
+            print('Login gagal. mematikan komputer')
+            return
 
-# username = input('Username : ')
-# password = getpass('Password : ')
+    print('\nKetik help untuk melihat perintah yang tersedia\n')
 
 
-# while True:
-#     print('\nKetik help untuk melihat perintah yang tersedia\n')
-#     command_input = input('Insert Command> ')
 
-#     if command_input in [c for c in COMMAND]:
-#         command_input = command_input.split(' ')
+os_booting()
 
-#         if command_input[len(command_input)-1].lower() == '-h' or command_input[len(command_input)-1].lower() == '--help':
-#             print(COMMAND[command_input[len(command_input)-2].lower()]['deskripsi'])
-#         elif command_input[0].lower() == 'help':
-#             for c in COMMAND:
-#                 print(f'{c}'.ljust(30), end='')
-#                 print(COMMAND[c]['deskripsi'].rjust(10))
-#         elif command_input[0].lower() == '':
-#             continue
-#         elif command_input[0].lower() == 'os':
-#             if len(command_input) > 1:
-#                 if command_input[1].lower() == 'name':
-#                     print(os_name)
-#                 elif command_input[1].lower() == 'fancyname':
-#                     tprint(os_name, 'random')
-#             else:
-#                 print('SIMULASI SISTEM OPERASI')
-#                 print('By: Kelompok E1')
-#                 print('Dibuat menggunakan Bahasa Python dengan tambahan library art ')
-#         elif command_input[0].lower() == 'reboot':
-#             os_booting()
-#         elif command_input[0].lower() == 'shutdown':
-#             print(f'Goodbye {username}')
-#             break
-#         elif command_input[0].lower() == 'author':
-#             tprint(os_name, 'random')
-#             print('Authored By')
-#             print('Muhammad Daffa Deli Junior Irawan - 152022003')
-#             print('Katon Rinantomo - 152022012')
-#         elif command_input[0].lower() == 'exit':
-#             break
-#     else:
-#         print(f'{command_input} bukan perintah yang valid!')
+SYSTEM_DATETIME = None
+SYSTEM_NEWDATETIME = datetime.now()
+SYSTEM_ON = True
+SYSTEM_UPTIME = timeit.default_timer()
+
+while SYSTEM_ON is True:
+    command_input = input('Masukkan Perintah> ')
+
+    command_input = command_input.strip().split(' ')
+    command_input = [c for c in command_input if len(c) > 0]
+
+    if len(command_input) < 1:
+        continue
+    elif command_input[len(command_input)-1].lower() == '-h' or command_input[len(command_input)-1].lower() == '--help':
+        if command_input[0] == '-h' or command_input[0] == '--help':
+            print('Butuh parameter dari perintah yang ada, ketik help untuk melihat perintah yang ada') 
+            continue
+
+        command_input.pop(len(command_input)-1)
+
+        str_command = list_to_string(command_input)
+
+        if str_command in [c for c in COMMAND]:
+            print(COMMAND[str_command])
+            continue
+        else:
+            print(f'{str_command} bukan perintah yang valid!')
+            continue
+    elif command_input[0].lower() in [c for c in COMMAND]:
+        match command_input[0].lower():
+            case 'help':
+                for c in COMMAND:
+                    print(f'{c}'.ljust(30), end='')
+                    print(COMMAND[c].rjust(10))
+            case 'os':
+                if len(command_input) < 2:
+                    print('SIMULASI SISTEM OPERASI')
+                    print(OS_NAME)
+                    print('By: Kelompok E1')
+                    print('Dibuat menggunakan Bahasa Python dengan tambahan library art')
+                else:
+                    match command_input[1].lower():
+                        case 'name':
+                            print(OS_NAME)
+                        case 'changename':
+                            new_osname = input("Masukkan nama baru untuk sistem operasi ini (jangan pakai spasi) : ")
+                            OS_NAME = new_osname
+                            print(f'Sistem Operasi berubah nama menjadi {console_colors.BOLD}{OS_NAME}{console_colors.ENDC}')
+                        case 'fancyname':
+                            tprint(OS_NAME, 'random')
+                        case 'changepass':
+                            password = getpass('Masukkan password : ')
+                            if password == PASSWORD:
+                                new_password = getpass('Masukkan password baru : ')
+                                if new_password == getpass('Masukkan password baru lagi : '):
+                                    PASSWORD = new_password
+                                    print('Ganti password berhasil')
+                                else:
+                                    print('Password tidak sesuai')
+                            else:
+                                print('Password Salah')
+                        case 'pcinfo':
+                            for spec in PC_INFO:
+                                print(f'{spec}'.ljust(30), end='')
+                                print(PC_INFO[spec]['name'].rjust(10))
+            case 'time':
+                if len(command_input) > 1:
+                    match command_input[1].lower():
+                        case 'usename':
+                            if SYSTEM_DATETIME is None:
+                                print(datetime.now().strftime('%A, %d %B %Y'))
+                                print(datetime.now().strftime('%H:%M:%S'))
+                            else:
+                                print(SYSTEM_DATETIME.strftime('%A, %d %B %Y'))
+                                print(SYSTEM_DATETIME.strftime('%H:%M:%S'))
+                        case 'uptime':
+                            print(f'Sistem telah berjalan {(timeit.default_timer() - SYSTEM_UPTIME):.2f} detik yang lalu')
+                        case 'set':
+                            if len(command_input) > 2:
+                                match command_input[2].lower():
+                                    case 'date':
+                                        new_date = input('Masukkan tanggal baru (dd/mm/yyyy): ').split('/')
+                                        if len(new_date) < 3:
+                                            print("Gunakan '/' untuk membagi tanggal")
+                                            continue
+                                        current_time = datetime.now().time()
+                                        if SYSTEM_DATETIME is None:
+                                            SYSTEM_DATETIME = datetime(day=int(new_date[0]), month=int(new_date[1]), year=int(new_date[2]), second=current_time.second, minute=current_time.minute, hour=current_time.hour)
+                                        else:
+                                            SYSTEM_DATETIME = SYSTEM_DATETIME + (datetime.now() - SYSTEM_NEWDATETIME)
+                                            SYSTEM_DATETIME = datetime(day=int(new_date[0]), month=int(new_date[1]), year=int(new_date[2]), second=SYSTEM_DATETIME.second, minute=SYSTEM_DATETIME.minute, hour=SYSTEM_DATETIME.hour)
+                                        print(f"Tanggal telah diubah ke {SYSTEM_DATETIME.strftime('%d/%m/%Y')}")
+                                        SYSTEM_NEWDATETIME = datetime.now()
+                                    case 'time':
+                                        new_time = input('Masukkan waktu baru (ss:mm:hh): ').split(':')
+                                        print(new_time)
+                                        if len(new_time) < 3:
+                                            print("Gunakan ':' untuk membagi waktu")
+                                            continue
+                                        current_date = datetime.now().date()
+                                        if SYSTEM_DATETIME is None:
+                                            SYSTEM_DATETIME = datetime(day=current_date.day, month=current_date.month, year=current_date.year, second=int(new_time[0]), minute=int(new_time[1]), hour=int(new_time[2]))
+                                        else:
+                                            SYSTEM_DATETIME = SYSTEM_DATETIME + (datetime.now() - SYSTEM_NEWDATETIME)
+                                            SYSTEM_DATETIME = datetime(day=SYSTEM_DATETIME.day, month=SYSTEM_DATETIME.month, year=SYSTEM_DATETIME.year, second=int(new_time[0]), minute=int(new_time[1]), hour=int(new_time[2]))
+                                        print(f"Waktu telah diubah ke {SYSTEM_DATETIME.strftime('%H:%M:%S')}")
+                                        SYSTEM_NEWDATETIME = datetime.now()
+                                    case _:
+                                        print('Hanya bisa melakukan operasi ke date/time')
+                else:
+                    if SYSTEM_DATETIME is None:
+                        print(datetime.now().strftime('%d/%m/%Y %H:%M:%S'))
+                    else:
+                        print((SYSTEM_DATETIME + (datetime.now() - SYSTEM_NEWDATETIME)).strftime('%d/%m/%Y %H:%M:%S'))
+            case 'cls':
+                print('\033[H\033[2J', end="")
+            case 'reboot':
+                os_booting()
+                continue
+            case 'shutdown':
+                loading_rotate('Shutting down')
+                print(f'Goodbye {console_colors.BOLD}{USERNAME}       {console_colors.ENDC}')
+                break
+            case 'author':
+                print('Authored By')
+                print(f'{console_colors.BOLD}{console_colors.YELLOW}Muhammad Daffa Deli Junior Irawan - 152022003{console_colors.ENDC}')
+                print(f'{console_colors.BOLD}{console_colors.YELLOW}Katon Rinantomo - 152022012{console_colors.ENDC}')
+            case 'dir':
+                if len(command_input) == 2:
+                    CURDIR = command_input[1].split('/')
+                    show_dir(DIRECTORY['root'], CURDIR)
+                elif len(command_input) > 2:
+                    match command_input[1].lower():
+                        case 'del':
+                            CURDIR = command_input[2].split('/')
+                            delete_dir(DIRECTORY['root'], CURDIR)
+                        case 'make':
+                            match command_input[2]:
+                                case 'file':
+                                    get_type_make_dir(DIRECTORY, 'file')
+                                case 'folder':
+                                    get_type_make_dir(DIRECTORY, 'folder')
+                                case _:
+                                    print('Hanya bisa melakukan operasi ke file/folder')
+                                    continue
+                else:
+                    show_dir(DIRECTORY['root'])
+    else:
+        print(f'{list_to_string(command_input)} bukan perintah yang valid!')

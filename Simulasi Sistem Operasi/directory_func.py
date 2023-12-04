@@ -2,51 +2,71 @@ from datasource import CommandNotValidError, console_colors
 
 def show_dir(dir, path=[], indent=0):
     current = dir
-    for folder in path:
-        if folder in current:
-            current = current[folder]
+    for directory in path:
+        if 'FD-'+directory in current:
+            current = current['FD-'+directory]
+        elif 'F-'+directory in current:
+            print('Path mengandung direktori bertipe file')
+            return
         else:
             print("Path tidak tersedia.")
             return
 
     for name, content in current.items():
+        if 'FD-' in name:
+            name = name.replace('FD-', '', 1)
+        elif 'F-' in name:
+            name = name.replace('F-', '', 1)
         print("  " * indent + f" {name}")
         show_dir(content, [], indent + 1)
 
 def delete_dir(dir, path=[]):
     current = dir
-    for i, folder in enumerate(path):
-        if folder in current:
-            if i == len(path) - 1:
-                del current[folder]
-                print("Direktori berhasil dihapus.")
+    for i, directory in enumerate(path):
+        for elem in current.keys():
+            if directory in elem:
+                if i == len(path) - 1:
+                    del current[elem]
+                    print("Direktori berhasil dihapus.")
+                    return
+                current = current[elem]
+            else:
+                print(f"Folder '{directory}' tidak ada di direktori ini.")
                 return
-            current = current[folder]
-        else:
-            print(f"Folder '{folder}' tidak ada di direktori ini.")
-            return
     print("Direktori tidak tersedia.")
 
 def make_dir(dir, path, is_file=True):
-    curr = dir
+    current = dir
 
-    for item in path[:-1]:
-        curr = curr.setdefault(item, {})
-
-    last_item = path[-1]
-
-    if last_item in curr:
-        if is_file:
-            print(f"File {last_item} sudah ada")
+    for directory in path[:-1]:
+        if 'FD-'+directory in current:
+            current = current['FD-'+directory]
+        elif 'F-'+directory in current:
+            print('Path mengandung direktori bertipe file')
+            return
         else:
-            print(f"Folder {last_item} sudah ada")
+            print("Path tidak tersedia.")
+            return
+    
+    if is_file:
+        last_item = 'F-'+path[-1].replace('/', '')
+    else:
+        last_item = 'FD-'+path[-1].replace('/', '')
+    
+    if last_item in current:
+        if is_file:
+            print(f"File {last_item.replace('F-', '')} sudah ada")
+            return
+        else:
+            print(f"Folder {last_item.replace('FD-', '')} sudah ada")
+            return
 
     if is_file:
-        curr[last_item] = {}
-        print(f"File {last_item} sukses dibuat")
+        current[last_item] = {}
+        print(f"File {last_item.replace('F-', '')} sukses dibuat")
     else:
-        curr.setdefault(last_item, {})
-        print(f"Folder {last_item} sukses dibuat.")
+        current.setdefault(last_item, {})
+        print(f"Folder {last_item.replace('FD-', '')} sukses dibuat.")
 
 def get_type_make_dir(DIRECTORY, dir_type):
     CURDIR = input("Masukkan path direktori gunakan '/': ")

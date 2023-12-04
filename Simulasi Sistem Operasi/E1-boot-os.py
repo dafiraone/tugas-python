@@ -32,39 +32,32 @@ def loading_rotate(message):
         print(f'{message} \\', end='\r')
         sleep(0.1)
 
-def list_to_string(lst):
-    new_string = ''
-    for c in lst: new_string += c + ' '
-    return new_string[:-1]
-
 def os_booting():
     os.system('cls' if os.name == 'nt' else 'clear')
     global OS_NAME
     sleep(0.3)
     print('Starting Power-On Self-Test (POST)')
-    # loading_ok('Verifying CPU')
-    # loading_ok('Motherboard Test')
-    # loading_ok('PCI Bus Test')
-    # loading_ok('RAM Test')
-    # loading_ok('Storage Drive Test')
-    # loading_ok('Graphic Card Test')
-    # loading_ok('I/O Port Test')
+    loading_ok('Verifying CPU')
+    loading_ok('Motherboard Test')
+    loading_ok('PCI Bus Test')
+    loading_ok('RAM Test')
+    loading_ok('Storage Drive Test')
+    loading_ok('Graphic Card Test')
+    loading_ok('I/O Port Test')
 
-    # loading_rotate('Booting OS')
+    loading_rotate('Booting OS')
     os.system('cls' if os.name == 'nt' else 'clear')
 
     tprint(OS_NAME, 'larry3d')
-    # loading_rotate('Booting OS')
+    loading_rotate('Booting OS')
     print(f'{console_colors.GREEN}{console_colors.BOLD}{console_colors.UNDERLINE}Booting Success!{console_colors.ENDC}'.rjust(10))
     sleep(0.5)
 
     for login_chance in range(2, -1, -1):
         global USERNAME
         global PASSWORD
-        # cred_username = input('Username : ')
-        # cred_password = getpass('Password : ')
-        cred_username = USERNAME
-        cred_password = PASSWORD
+        cred_username = input('Username : ')
+        cred_password = getpass('Password : ')
 
         if cred_username != USERNAME or cred_password != PASSWORD:
             print('Username / Password Salah')
@@ -93,6 +86,7 @@ SYSTEM_UPTIME = timeit.default_timer()
 while SYSTEM_ON is True:
     try:
         command_input = input('Masukkan Perintah> ')
+
 
         command_input = command_input.strip().split(' ')
         command_input = [c for c in command_input if len(c) > 0]
@@ -240,12 +234,13 @@ while SYSTEM_ON is True:
                 case 'dir':
                     if len(command_input) == 2:
                         CURDIR = command_input[1].split('/')
-                        show_dir(DIRECTORY['root'], CURDIR)
+                        show_dir(DIRECTORY['FD-root'], CURDIR)
                     elif len(command_input) > 2:
                         match command_input[1].lower():
                             case 'del':
                                 CURDIR = command_input[2].split('/')
-                                delete_dir(DIRECTORY['root'], CURDIR)
+                                CURDIR = [elem for elem in CURDIR if len(elem) > 0] # jika pakai / diakhir tidak akan menambah string kosong
+                                delete_dir(DIRECTORY['FD-root'], CURDIR)
                             case 'make':
                                 match command_input[2]:
                                     case 'file':
@@ -256,7 +251,7 @@ while SYSTEM_ON is True:
                                         print('Hanya bisa melakukan operasi ke file/folder')
                                         continue
                     else:
-                        show_dir(DIRECTORY['root'])
+                        show_dir(DIRECTORY['FD-root'])
         else:
             raise CommandNotValidError(f'{list_to_string(command_input)} {console_colors.FAIL}bukan perintah yang valid!{console_colors.ENDC}')
     except CommandNotValidError as Err:

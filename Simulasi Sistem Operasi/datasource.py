@@ -9,6 +9,11 @@ class console_colors:
 class CommandNotValidError(Exception):
     pass
 
+def list_to_string(lst):
+    new_string = ''
+    for c in lst: new_string += c + ' '
+    return new_string[:-1]
+
 COMMAND = {
     'help' : 'Dokumentasi setiap perintah',
     'os' : 'Melihat informasi sistem operasi',
@@ -49,14 +54,14 @@ PC_INFO = {
 }
 
 DIRECTORY = {
-    'root': {
-        'folder1': {
-            'folder11': {
-                'tes.py': {}
+    'FD-root': {
+        'FD-folder1': {
+            'FD-folder11': {
+                'F-tes.py': {}
             }
         },
-        'folder2': {
-            'wow.py': {}
+        'FD-folder2': {
+            'F-wow.py': {}
         },
     }
 }

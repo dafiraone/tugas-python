@@ -6,6 +6,9 @@ class console_colors:
     UNDERLINE = '\033[4m'
     ENDC = '\033[0m'
 
+class CommandNotValidError(Exception):
+    pass
+
 COMMAND = {
     'help' : 'Dokumentasi setiap perintah',
     'os' : 'Melihat informasi sistem operasi',

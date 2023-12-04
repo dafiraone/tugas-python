@@ -1,3 +1,5 @@
+from datasource import CommandNotValidError, console_colors
+
 def show_dir(dir, path=[], indent=0):
     current = dir
     for folder in path:
@@ -53,6 +55,8 @@ def get_type_make_dir(DIRECTORY, dir_type):
         CURDIR = ['root']
     else:
         CURDIR.insert(0, 'root')
-    input_dir = input(f'Nama {dir_type} : ')
+    input_dir = input(f'Nama {dir_type} : ').strip()
+    if len(input_dir) < 1:
+        raise CommandNotValidError(f'{console_colors.FAIL}Nama tidak boleh kosong!{console_colors.ENDC}')
     CURDIR.append(input_dir.replace(' ', '-'))
     make_dir(DIRECTORY, CURDIR, True if dir_type == 'file' else False)

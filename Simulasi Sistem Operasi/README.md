@@ -8,7 +8,7 @@ Ketik lalu jalankan perintah **pip install -r requirements.txt** di terminal. Ca
 
 ## Menjalankan Program
 
-Ketik lalu jalankan perintah **py boot-os.py** di terminal. Catatan: menjalankan perintah harus dalam folder yang sama dengan proyek ini.
+Ketik lalu jalankan perintah **py boot-os.py** untuk Windows, **python3 boot-os.py** untuk macOS atau Linux a di terminal. Catatan: menjalankan perintah harus dalam folder yang sama dengan proyek ini.
 
 ## User Credentials
 Username : root

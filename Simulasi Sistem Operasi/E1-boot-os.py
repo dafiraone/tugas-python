@@ -174,8 +174,8 @@ while SYSTEM_ON is True:
                                     print(datetime.now().strftime('%A, %d %B %Y'))
                                     print(datetime.now().strftime('%H:%M:%S'))
                                 else:
-                                    print(SYSTEM_DATETIME.strftime('%A, %d %B %Y'))
-                                    print(SYSTEM_DATETIME.strftime('%H:%M:%S'))
+                                    print((SYSTEM_DATETIME + (datetime.now() - SYSTEM_NEWDATETIME)).strftime('%A, %d %B %Y'))
+                                    print((SYSTEM_DATETIME + (datetime.now() - SYSTEM_NEWDATETIME)).strftime('%H:%M:%S'))
                             case 'uptime':
                                 print(f'Sistem telah berjalan {(timeit.default_timer() - SYSTEM_UPTIME):.2f} detik yang lalu')
                             case 'set':

@@ -23,16 +23,21 @@ def show_dir(dir, path=[], indent=0):
 def delete_dir(dir, path=[]):
     current = dir
     for i, directory in enumerate(path):
-        for elem in current.keys():
-            if directory in elem:
-                if i == len(path) - 1:
-                    del current[elem]
-                    print("Direktori berhasil dihapus.")
-                    return
-                current = current[elem]
-            else:
-                print(f"Folder '{directory}' tidak ada di direktori ini.")
+        if 'FD-'+directory in current.keys(): 
+            if i == len(path) - 1:
+                del current['FD-'+directory]
+                print("Direktori berhasil dihapus.")
                 return
+            current = current['FD-'+directory]
+        elif 'F-'+directory in current.keys():
+            if i == len(path) - 1:
+                del current['F-'+directory]
+                print("Direktori berhasil dihapus.")
+                return
+            print('Direktori ini berisi file')
+        else:
+            print(f"Folder '{directory}' tidak ada di direktori ini.")
+            return
     print("Direktori tidak tersedia.")
 
 def make_dir(dir, path, is_file=True):

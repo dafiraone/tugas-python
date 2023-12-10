@@ -1,0 +1,22 @@
+- Mahasiswa
+    Read
+
+- Dosen
+    Create/Read
+
+- Admin
+    Create/Read/Update/Delete
+
+Yang harus ada:
+if elif else
+ternary conditional 
+komentar
+for/while
+break, continue, else
+print + separator (sep='-'), + end=
+numpy
+matplotlib
+lambda
+local global scope
+csv
+regex

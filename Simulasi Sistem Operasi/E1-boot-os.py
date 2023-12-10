@@ -37,13 +37,13 @@ def os_booting():
     global OS_NAME
     sleep(0.3)
     print('Starting Power-On Self-Test (POST)')
-    # loading_ok('Verifying CPU')
-    # loading_ok('Motherboard Test')
-    # loading_ok('PCI Bus Test')
-    # loading_ok('RAM Test')
-    # loading_ok('Storage Drive Test')
-    # loading_ok('Graphic Card Test')
-    # loading_ok('I/O Port Test')
+    loading_ok('Verifying CPU')
+    loading_ok('Motherboard Test')
+    loading_ok('PCI Bus Test')
+    loading_ok('RAM Test')
+    loading_ok('Storage Drive Test')
+    loading_ok('Graphic Card Test')
+    loading_ok('I/O Port Test')
 
     loading_rotate('Booting OS')
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -76,7 +76,7 @@ def os_booting():
 
 
 
-# os_booting()
+os_booting()
 
 SYSTEM_DATETIME = None
 SYSTEM_NEWDATETIME = datetime.now()

@@ -10,6 +10,8 @@ def dosen():
 2: Lihat data Mahasiswa
 3: Tambah nilai Mahasiswa
 4: Lihat nilai Mahasiswa
+5: Lihat statistik nilai Mahasiswa
+exit: Keluar
 Pilihan anda -> """)
         try:
             connection = mysql.connector.connect(**DB_CONFIG)
@@ -23,6 +25,8 @@ Pilihan anda -> """)
                     tambah_nilai(connection)
                 case '4':
                     lihat_nilai(connection)
+                case '5':
+                    lihat_statistik_nilai(connection)
                 case _:
                     print("----- Pilihan yang anda ketikan tidak sesuai! -----")
                     print()

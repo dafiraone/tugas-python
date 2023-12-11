@@ -2,6 +2,7 @@ import mysql.connector
 from getpass import getpass
 from admin import *
 from dosen import *
+from mahasiswa import *
 from datasource import *
 
 def login(role):
@@ -9,10 +10,18 @@ def login(role):
         connection = mysql.connector.connect(**DB_CONFIG)
         cursor = connection.cursor()
 
-        username = input('Masukkan username : ')
+        if role == 'm':
+            username = input('Masukkan nim : ')
+            if not username.isnumeric():
+                print('---- NIM hanya terdiri dari angka ----')
+                return
+            db_query = f"SELECT * FROM mahasiswa WHERE nim={username}"
+        else:
+            username = input('Masukkan username : ')
+            db_query = f"SELECT * FROM user WHERE username='{username}'  AND role='{role}'"
         password = getpass('Masukkan password : ')
 
-        cursor.execute(f"SELECT * FROM user WHERE username='{username}' AND password='{password}' AND role='{role}'")
+        cursor.execute(db_query + f" AND password='{password}'")
         cred = cursor.fetchall()
         if len(cred) > 0:
             print('---- Selamat anda berhasil login ----')
@@ -40,6 +49,7 @@ Pilihan anda -> """)
     match akses.lower():
         case 'm' | 'mhs' | 'mahasiswa':
             user = login('m')
+            mahasiswa(user) if user != None else None
         case 'd' | 'dsn' | 'dosen':
             user = login('d')
             dosen() if user != None else None

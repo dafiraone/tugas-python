@@ -1,6 +1,6 @@
 import os
 
-CURDIR = os.getcwd()
+CURDIR = os.path.dirname(os.path.realpath(__file__))
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',

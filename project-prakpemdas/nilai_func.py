@@ -1,3 +1,5 @@
+import numpy
+
 def tambah_nilai(connection):
         cursor = connection.cursor()
         nim = input('Masukkan nim mahasiswa : ')
@@ -25,9 +27,18 @@ def tambah_nilai(connection):
         print('---- Nilai untuk nim '+ nim +' berhasil ditambahkan ----')
         print()
 
-def lihat_nilai(connection):
+def lihat_nilai(connection, nim=None):
         cursor = connection.cursor()
-        nim = input('Masukkan nim mahasiswa yang akan dicek nilainya : ')
+
+        if nim == None:
+            nim = input('Masukkan nim mahasiswa yang akan dicek nilainya : ')
+        cursor.execute(f"SELECT nim FROM mahasiswa")
+        nim_mahasiswa = [c[0] for c in cursor.fetchall()]
+
+        if int(nim) not in nim_mahasiswa:
+             print(f'---- Tidak ada mahasiswa dengan nim {nim} ----')
+             return
+
         cursor.execute(f"SELECT * FROM nilai WHERE NIM={nim} ORDER BY nim ASC, kode_matkul ASC")
         nilai = cursor.fetchall()
         cursor.execute(f"SELECT nama FROM mahasiswa WHERE NIM={nim}")
@@ -71,3 +82,35 @@ def ubah_nilai(connection):
 
     print(f'Mahasiswa dengan nim {nim} berhasil diubah')
     print()
+
+def lihat_statistik_nilai(connection, nim=None):
+        cursor = connection.cursor()
+
+        nim = input('Masukkan nim mahasiswa yang akan dicek nilainya : ')
+        cursor.execute(f"SELECT nim FROM mahasiswa")
+        nim_mahasiswa = [c[0] for c in cursor.fetchall()]
+
+
+        if int(nim) not in nim_mahasiswa:
+             print(f'---- Tidak ada mahasiswa dengan nim {nim} ----')
+             return
+
+        cursor.execute(f"SELECT * FROM nilai WHERE NIM={nim} ORDER BY nim ASC, kode_matkul ASC")
+        nilai = cursor.fetchall()
+
+        if len(nilai) < 1:
+             print(f'---- Belum ada nilai untuk mahasiswa dengan nim {nim} ----')
+             return
+
+        cursor.execute(f"SELECT nama FROM mahasiswa WHERE NIM={nim}")
+        nama = cursor.fetchall()[0][0]
+        # cursor.execute(f"SELECT kode, nama FROM matkul")
+        # matkul = cursor.fetchall()
+
+        rerata_nilai = numpy.array([c[3] for c in nilai])
+        rerata_nilai = numpy.mean(rerata_nilai)
+        
+        print(f'Rerata nilai dari {nama} untuk semua matkul adalah: {rerata_nilai}')
+
+        
+        print()

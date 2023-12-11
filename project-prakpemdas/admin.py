@@ -11,7 +11,9 @@ def admin():
 3: Lihat data Mahasiswa
 4: Ubah data Mahasiswa
 5: Hapus Mahasiswa
-6: Ubah nilai Mahasiswa
+6: Tambah nilai Mahasiswa
+7: Ubah nilai Mahasiswa
+8: Lihat nilai Mahasiswa
 exit: Keluar
 Pilihan anda -> """)
         try:
@@ -29,7 +31,11 @@ Pilihan anda -> """)
                 case '5':
                     hapus_mahasiswa(connection)
                 case '6':
+                    tambah_nilai(connection)
+                case '7':
                     ubah_nilai(connection)
+                case '8':
+                    lihat_nilai(connection)
                 case 'exit':
                     print()
                     break

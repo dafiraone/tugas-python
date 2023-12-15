@@ -25,7 +25,7 @@ surface = pygame.Surface((WIDTH, HEIGHT))
 try:
     background_image = pygame.image.load('background.png')
     background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
-except pygame.error:
+except:
     background_image = None
 
 # Fonts
@@ -62,7 +62,7 @@ current_rect_y = target_rect_y
 
 # Main loop
 running = True
-game_active = False
+menu = None
 cursor_position = []
 x = []
 y = []
@@ -73,13 +73,16 @@ draw_line = True
 on_reflection = True
 refleksi = random.choice("12345")
 jawaban = None
+text = ''
+draw_text = pygame.font.Font(None, 36)
+quiz_surface = pygame.Surface((WIDTH, 50))
 
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             running = False
-        if game_active == False:
+        if menu == None:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     selected_menu = (selected_menu - 1) % len(menu_options)
@@ -88,21 +91,42 @@ while running:
                 elif event.key == pygame.K_RETURN:
                     if menu_options[selected_menu] == "Start":
                         game_active = True
+                        menu = menu_options[selected_menu]
                         continue
                     elif menu_options[selected_menu] == "Cara Bermain":
-                        print("Tekan enter untuk memilih menu")
-                        print("Tekan panah atas/bawah untuk navigasi menu")
-                        print("Tekan panah kiri/kanan untuk kontrol volume")
-                        print("Klik kiri mouse untuk membuat garis")
-                        print("Ketik angka 1-5 untuk menjawab pertanyaan")
+                        menu = menu_options[selected_menu]
                     elif menu_options[selected_menu] == "About":
-                        print("Grafika Komputer Terapan")
-                        print("Project Akhir - Start Menu pada Game")
-                        print('Kelompok 9')
-                        print('Muhammad Daffa Deli Junior Irawan - 152022003')
-                        print('Bagus Anugrah - 152022029\n')
+                        menu = menu_options[selected_menu]
                     elif menu_options[selected_menu] == "Exit":
                         running = False
+                elif event.key == pygame.K_LEFT:
+                    if volume_step > 0:
+                        rotate_angle = (rotate_angle + 9) % 360
+                        volume_step = round(volume_step - 0.05, 2)
+                        volume = round(max(0, volume - 0.05), 2)
+                        pygame.mixer.music.set_volume(volume)
+                elif event.key == pygame.K_RIGHT:
+                    if volume_step < 1:
+                        rotate_angle = (rotate_angle - 9) % 360
+                        volume_step = round(volume_step + 0.05, 2)
+                        volume = round(min(1, volume + 0.05), 2)
+                        pygame.mixer.music.set_volume(volume)
+        elif menu == 'About' or menu == 'Cara Bermain':
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_BACKSPACE:
+                    surface.fill(BLACK)
+                    cursor_position = []
+                    x = []
+                    y = []
+                    last_x = []
+                    last_y = []
+                    last_line = False
+                    draw_line = True
+                    on_reflection = True
+                    game_active = False
+                    refleksi = random.choice("12345")
+                    jawaban = None
+                    menu = None
                 elif event.key == pygame.K_LEFT:
                     if volume_step > 0:
                         rotate_angle = (rotate_angle + 9) % 360
@@ -123,6 +147,7 @@ while running:
                 if event.key == pygame.K_RETURN:
                     draw_line = False
                 elif event.key == pygame.K_BACKSPACE:
+                    surface.fill(BLACK)
                     cursor_position = []
                     x = []
                     y = []
@@ -132,6 +157,9 @@ while running:
                     draw_line = True
                     on_reflection = True
                     game_active = False
+                    refleksi = random.choice("12345")
+                    jawaban = None
+                    menu = None
                 elif event.key == pygame.K_1:
                     jawaban = '1'
                 elif event.key == pygame.K_2:
@@ -154,106 +182,142 @@ while running:
                         volume_step = round(volume_step + 0.05, 2)
                         volume = round(min(1, volume + 0.05), 2)
                         pygame.mixer.music.set_volume(volume)
-
-    if game_active:
-        screen.fill(BLACK)
-        if draw_line:
-            draw_text = pygame.font.Font(None, 36).render('Gambar garis bebas', True, WHITE)
-            draw_text_rect= draw_text.get_rect(center=(WIDTH // 2, 50))
-            surface.blit(draw_text, draw_text_rect)
-        else:
-            text = 'Pencerminan Terhadap :\n1. sumbu x      2. sumbu y      3. garis y=x\n4. garis y=-x     5. titik asal O (0,0)\n- Ketik angka untuk menjawab -'
-            draw_text = [pygame.font.Font(None, 36).render(line, True, RED) for line in text.split('\n')]
-            for i, render_line in enumerate(draw_text):
-                draw_text_rect = render_line.get_rect(center=(WIDTH // 2, HEIGHT - 200 + i * 40))
-                surface.blit(render_line, draw_text_rect)
-
-        screen.blit(surface, (0,0))
-
-        pygame.display.set_caption("Kuis Refleksi")
-        if draw_line and len(cursor_position) == 2:
-                x1 = cursor_position[0][0]
-                x2 = cursor_position[1][0]
-                y1 = cursor_position[0][1]
-                y2 = cursor_position[1][1]
-
-                dx = x2 - x1
-                dy = y2 - y1
-
-                if abs(dx) > abs(dy):
-                    r = abs(dx)
+    if menu != None:
+        if menu == 'Start':
+            screen.fill(BLACK)
+            if draw_line:
+                text = 'Gambar garis bebas'
+                draw_text = pygame.font.Font(None, 36).render(text, True, WHITE)
+                draw_text_rect= draw_text.get_rect(center=(WIDTH // 2, 50))
+                surface.blit(draw_text, draw_text_rect)
+            else:
+                if len(text.split('\n')) > 1:
+                    draw_text = [pygame.font.Font(None, 36).render(line, True, RED) for line in text.split('\n')]
+                    for i, render_line in enumerate(draw_text):
+                        draw_text_rect = render_line.get_rect(center=(WIDTH // 2, HEIGHT - 200 + i * 40))
+                        surface.blit(render_line, draw_text_rect)
                 else:
-                    r = abs(dy)
-                    
-                try:
-                    xr = dx/r
-                    yr = dy/r
-                except:
-                    draw_line = False
+                    quiz_surface.fill(BLACK)
+                    draw_text = pygame.font.Font(None, 36).render(text, True, WHITE)
+                    draw_text_rect= draw_text.get_rect(center=(WIDTH//2, 30))
+                    quiz_surface.blit(draw_text, draw_text_rect)
+                    surface.blit(quiz_surface, (0, HEIGHT-70))
 
-                i = 0
+            screen.blit(surface, (0,0))
 
-                x.append(round(x1))
-                y.append(round(y1))
-                while i < r:
-                    x1 = x1 + xr
-                    y1 = y1 + yr
+            pygame.display.set_caption("Kuis Refleksi")
+
+            # Menggambar garis dengan DDA
+            if draw_line and len(cursor_position) == 2:
+                    x1 = cursor_position[0][0]
+                    x2 = cursor_position[1][0]
+                    y1 = cursor_position[0][1]
+                    y2 = cursor_position[1][1]
+
+                    dx = x2 - x1
+                    dy = y2 - y1
+
+                    if abs(dx) > abs(dy):
+                        r = abs(dx)
+                    else:
+                        r = abs(dy)
+                        
+                    try:
+                        xr = dx/r
+                        yr = dy/r
+                    except:
+                        draw_line = False
+
+                    i = 0
+
                     x.append(round(x1))
                     y.append(round(y1))
-                    i +=1
-                cursor_position.pop(0)
+                    while i < r:
+                        x1 = x1 + xr
+                        y1 = y1 + yr
+                        x.append(round(x1))
+                        y.append(round(y1))
+                        i +=1
+                    cursor_position.pop(0)
 
-        if draw_line == False:
+            if draw_line == False:
+                for i in range(len(x)):
+                    surface.set_at((x[i], y[i]), 'black')
+
+                if refleksi == '1':
+                    for point in range(len(y)):
+                        y[point] = HEIGHT - y[point]
+                elif refleksi == '2':
+                    for point in range(len(x)):
+                        x[point] = WIDTH - x[point]
+                elif refleksi == '3':
+                    for point in range(len(x)):
+                        x, y = y, x
+                elif refleksi == '4':
+                    if last_line == True:
+                        x = last_x.copy()
+                        y = last_y.copy()
+                        last_line = False
+                    else:
+                        last_x = x.copy()
+                        last_y = y.copy()
+                        for point in range(len(x)):
+                            x[point], y[point] = HEIGHT - y[point], WIDTH - x[point]
+                        last_line = True
+                elif refleksi == '5':
+                    if last_line == True:
+                        x = last_x.copy()
+                        y = last_y.copy()
+                        last_line = False
+                    else:
+                        last_x = x.copy()
+                        last_y = y.copy()
+                        for point in range(len(x)):
+                            x[point], y[point] = WIDTH - x[point], HEIGHT - y[point] 
+                        last_line = True
+
+                pygame.time.delay(500)
+                
             for i in range(len(x)):
-                surface.set_at((x[i], y[i]), 'black')
-
-            if refleksi == '1':
-                for point in range(len(y)):
-                    y[point] = HEIGHT - y[point]
-            elif refleksi == '2':
-                for point in range(len(x)):
-                    x[point] = WIDTH - x[point]
-            elif refleksi == '3':
-                for point in range(len(x)):
-                    x, y = y, x
-            elif refleksi == '4':
-                if last_line == True:
-                    x = last_x.copy()
-                    y = last_y.copy()
-                    last_line = False
+                surface.set_at((x[i], y[i]), 'white')
+            if jawaban != None:
+                if jawaban == refleksi:
+                    text = 'Jawaban benar'
                 else:
-                    last_x = x.copy()
-                    last_y = y.copy()
-                    for point in range(len(x)):
-                        x[point], y[point] = HEIGHT - y[point], WIDTH - x[point]
-                    last_line = True
-            elif refleksi == '5':
-                if last_line == True:
-                    x = last_x.copy()
-                    y = last_y.copy()
-                    last_line = False
-                else:
-                    last_x = x.copy()
-                    last_y = y.copy()
-                    for point in range(len(x)):
-                        x[point], y[point] = WIDTH - x[point], HEIGHT - y[point] 
-                    last_line = True
-
-            pygame.time.delay(500)
-            
-        for i in range(len(x)):
-            surface.set_at((x[i], y[i]), 'white')
-        if jawaban != None:
-            if jawaban == refleksi:
-                print('Jawaban benar')
+                    text = 'Jawaban salah'
             else:
-                print('Jawaban salah')
+                text = 'Pencerminan Terhadap :\n1. sumbu x      2. sumbu y      3. garis y=x\n4. garis y=-x     5. titik asal O (0,0)\n- Ketik angka untuk menjawab -'
+        elif menu == 'Cara Bermain':
+            pygame.display.set_caption("About")
+            surface.fill(BLACK)
+            if background_image:
+                surface.blit(background_image, (0, 0))
+            else:
+                screen.fill(BLACK)
+            text = 'Tekan enter untuk memilih menu\nTekan panah atas/bawah untuk navigasi menu\nTekan panah kiri/kanan untuk kontrol volume\nKlik kiri mouse untuk membuat garis\nKetik angka 1-5 untuk menjawab pertanyaan\nTekan backspace untuk kembali ke menu'
+            draw_text = [pygame.font.Font(None, 36).render(line, True, WHITE) for line in text.split('\n')]
+            for i, render_line in enumerate(draw_text):
+                draw_text_rect = render_line.get_rect(center=(WIDTH // 2, (HEIGHT // 2 - 100) + i * 50))
+                surface.blit(render_line, draw_text_rect)
+            screen.blit(surface, (0,0))
+        elif menu == 'About':
+            pygame.display.set_caption("About")
+            surface.fill(BLACK)
+            if background_image:
+                surface.blit(background_image, (0, 0))
+            else:
+                screen.fill(BLACK)
+            text = 'Grafika Komputer Terapan\nProject Akhir - Start Menu pada game\nKelompok 9\nMuhammad Daffa Deli Junior Irawan - 152022003\nBagus Anugrah - 152022029\nTekan backspace untuk kembali ke menu'
+            draw_text = [pygame.font.Font(None, 36).render(line, True, WHITE) for line in text.split('\n')]
+            for i, render_line in enumerate(draw_text):
+                draw_text_rect = render_line.get_rect(center=(WIDTH // 2, (HEIGHT // 2 - 100) + i * 50))
+                surface.blit(render_line, draw_text_rect)
+            screen.blit(surface, (0,0))
     else:
         if background_image:
             screen.blit(background_image, (0, 0))
         else:
-            screen.fill(WHITE)
-
+            screen.fill(BLACK)
         
         header_text = header_font.render("KUIS REFLEKSI", True, WHITE)
         header_text_rect = header_text.get_rect(center=(WIDTH // 2, 200))

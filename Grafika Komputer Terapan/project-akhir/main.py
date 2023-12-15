@@ -251,8 +251,7 @@ while running:
                     for point in range(len(x)):
                         x[point] = WIDTH - x[point]
                 elif refleksi == '3':
-                    for point in range(len(x)):
-                        x, y = y, x
+                    x, y = y, x
                 elif refleksi == '4':
                     if last_line == True:
                         x = last_x.copy()

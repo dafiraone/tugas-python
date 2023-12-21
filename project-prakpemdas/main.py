@@ -4,6 +4,7 @@ from admin import *
 from dosen import *
 from mahasiswa import *
 from datasource import *
+import re
 
 def login(role):
     try:
@@ -39,24 +40,31 @@ def login(role):
     
 print('Program Pengelolaan Nilai Mahasiswa')
 
+pattern_mhs = r'\b(?:m|mhs|mahasiswa|\w*m\w*h\w*s\w*w\w*)\b'
+pattern_dosen = r'\b(?:d|dsn|dosen|\w*d\w*s\w*n\w*)\b'
+pattern_admin = r'\b(?:a|adm|admin|\w*a\w*d\w*m\w*)\b'
+
 while True:
     akses = input("""Login Sebagai:
 M = Mahasiswa
 D = Dosen
 A = Admin
+exit: Keluar
 Pilihan anda -> """)
-
-    match akses.lower():
-        case 'm' | 'mhs' | 'mahasiswa':
+    
+    if len(re.findall(pattern_mhs, akses, flags=re.IGNORECASE)) > 0:
             user = login('m')
             mahasiswa(user) if user != None else None
-        case 'd' | 'dsn' | 'dosen':
+    elif len(re.findall(pattern_dosen, akses, flags=re.IGNORECASE)) > 0:
             user = login('d')
             dosen() if user != None else None
-        case 'a' | 'adm' | 'admin':
+    elif len(re.findall(pattern_admin, akses, flags=re.IGNORECASE)) > 0:
             user = login('a')
             admin() if user != None else None
-        case _:
-            print("----- Pilihan yang anda ketikan tidak sesuai! -----")
-            print()
-            continue
+    elif akses == 'exit':
+        print()
+        break
+    else:
+        print("----- Pilihan yang anda ketikan tidak sesuai! -----")
+        print()
+        continue

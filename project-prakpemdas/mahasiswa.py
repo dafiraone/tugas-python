@@ -14,6 +14,9 @@ Pilihan anda -> """)
             match akses:
                 case '1':
                     lihat_nilai(connection, mahasiswa[0])
+                case 'exit':
+                    print()
+                    break
                 case _:
                     print("----- Pilihan yang anda ketikan tidak sesuai! -----")
                     print()

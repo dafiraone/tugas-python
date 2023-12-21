@@ -1,3 +1,5 @@
+import pandas as pd
+
 def tambah_mahasiswa(connection):
         cursor = connection.cursor()
         nama = input('Masukkan nama : ')
@@ -18,21 +20,28 @@ def daftar_mahasiswa(connection):
     cursor.execute("SELECT * FROM mahasiswa")
     rows = cursor.fetchall()
 
-    print('NIM'.ljust(13), end="")
-    print('Nama'.ljust(14), end="")
-    print('Alamat'.ljust(16), end="")
-    print('No. Telp'.ljust(18), end="")
-    print('Email'.ljust(20), end="")
-    print('Tanggal Lahir'.ljust(23), end="")
-    print('Password')
+    daftar_mahasiswa = {
+        'NIM': [],
+        'Nama': [],
+        'Alamat': [],
+        'No. Telp': [],
+        'Email': [],
+        'Tanggal Lahir': [],
+        'Password': [],
+    }
+
     for mhs in rows:
-        print(f'{mhs[0]}'.ljust(13), end="")
-        print(f'{mhs[1]}'.ljust(14), end="")
-        print(f'{mhs[2]}'.ljust(16), end="")
-        print(f'{mhs[3]}'.ljust(18), end="")
-        print(f'{mhs[4]}'.ljust(20), end="")
-        print(f'{mhs[5]}'.ljust(23), end="")
-        print(f'{mhs[6]}')
+        daftar_mahasiswa['NIM'].append(mhs[0])
+        daftar_mahasiswa['Nama'].append(mhs[1])
+        daftar_mahasiswa['Alamat'].append(mhs[2])
+        daftar_mahasiswa['No. Telp'].append(mhs[3])
+        daftar_mahasiswa['Email'].append(mhs[4])
+        daftar_mahasiswa['Tanggal Lahir'].append(mhs[5])
+        daftar_mahasiswa['Password'].append(mhs[6])
+    
+    df_daftar_mahasiswa = pd.DataFrame(daftar_mahasiswa)
+
+    print(df_daftar_mahasiswa)
     print()
 
 def data_mahasiswa(connection):
@@ -43,21 +52,28 @@ def data_mahasiswa(connection):
     cursor.execute(f"SELECT * FROM mahasiswa WHERE nim LIKE '%{input_search}%' OR nama LIKE '%{input_search}%' OR alamat LIKE '%{input_search}%' OR no_telp LIKE '%{input_search}%' OR email LIKE '%{input_search}%'")
     rows = cursor.fetchall()
 
-    print('NIM'.ljust(13), end="")
-    print('Nama'.ljust(14), end="")
-    print('Alamat'.ljust(16), end="")
-    print('No. Telp'.ljust(18), end="")
-    print('Email'.ljust(20), end="")
-    print('Tanggal Lahir'.ljust(23), end="")
-    print('Password')
+    data_mahasiswa = {
+        'NIM': [],
+        'Nama': [],
+        'Alamat': [],
+        'No. Telp': [],
+        'Email': [],
+        'Tanggal Lahir': [],
+        'Password': [],
+    }
+    
     for mhs in rows:
-        print(f'{mhs[0]}'.ljust(13), end="")
-        print(f'{mhs[1]}'.ljust(14), end="")
-        print(f'{mhs[2]}'.ljust(16), end="")
-        print(f'{mhs[3]}'.ljust(18), end="")
-        print(f'{mhs[4]}'.ljust(20), end="")
-        print(f'{mhs[5]}'.ljust(23), end="")
-        print(f'{mhs[6]}')
+        data_mahasiswa['NIM'].append(mhs[0])
+        data_mahasiswa['Nama'].append(mhs[1])
+        data_mahasiswa['Alamat'].append(mhs[2])
+        data_mahasiswa['No. Telp'].append(mhs[3])
+        data_mahasiswa['Email'].append(mhs[4])
+        data_mahasiswa['Tanggal Lahir'].append(mhs[5])
+        data_mahasiswa['Password'].append(mhs[6])
+    
+    df_data_mahasiswa = pd.DataFrame(data_mahasiswa)
+
+    print(df_data_mahasiswa)
     print()
 
 def ubah_mahasiswa(connection):

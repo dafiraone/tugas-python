@@ -11,6 +11,7 @@ def dosen():
 3: Tambah nilai Mahasiswa
 4: Lihat nilai Mahasiswa
 5: Lihat statistik nilai Mahasiswa
+6: Tampilkan report nilai
 exit: Keluar
 Pilihan anda -> """)
         try:
@@ -27,6 +28,11 @@ Pilihan anda -> """)
                     lihat_nilai(connection)
                 case '5':
                     lihat_statistik_nilai(connection)
+                case '6':
+                    report_nilai(connection)
+                case 'exit':
+                    print()
+                    break
                 case _:
                     print("----- Pilihan yang anda ketikan tidak sesuai! -----")
                     print()

@@ -7,7 +7,7 @@ import random
 pygame.init()
 
 # Constants
-WIDTH, HEIGHT = 1000, 800
+WIDTH, HEIGHT = 600, 600
 FPS = 60
 
 # Colors

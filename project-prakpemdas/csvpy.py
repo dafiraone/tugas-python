@@ -3,7 +3,7 @@ import csv
 def data_csv():
     data = []
 
-    with open(f'login.csv', 'r') as File:
+    with open(f'report.csv', 'r') as File:
         csv_reader = csv.reader(File, delimiter=',')
         for row in csv_reader:
             data.append({'username': row[0], 'password': row[1], 'role': row[2]})
@@ -99,8 +99,9 @@ def update():
             if password_baru != None:
                 data[i]['password'] = password_baru
 
-            with open('login.csv', 'w', newline='\n') as file:
+            with open('report.csv', 'w', newline='\n') as file:
                 for i in data:
+                    print(i)
                     writer = csv.DictWriter(file, fieldnames=i.keys())
                     writer.writerow(i)
                 print(f'---- {username} sudah berhasil diupdate ----')

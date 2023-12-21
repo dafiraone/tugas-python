@@ -3,64 +3,56 @@ import sys
 import math
 import random
 
-# Initialize Pygame
 pygame.init()
 
+<<<<<<< HEAD
 # Constants
+=======
+>>>>>>> d8009a41904cff26e20ac66cf41ba471d0c0e896
 WIDTH, HEIGHT = 600, 600
 FPS = 60
 
-# Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 
-# Set up the display
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Project Akhir Grafika Komputer Terapan - Kelompok 9")
 clock = pygame.time.Clock()
 surface = pygame.Surface((WIDTH, HEIGHT))
 
-# Background image (replace 'background.jpg' with the path to your image)
 try:
     background_image = pygame.image.load('background.png')
     background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 except:
     background_image = None
 
-# Fonts
 font = pygame.font.Font(None, 36)
 header_font = pygame.font.Font(None, 48)
 
-# Menu options
+# Menu
 menu_options = ['Start', 'Cara Bermain', 'About', 'Exit']
 selected_menu = 0
 
-# Animation variables
 animation_time = 0
-animation_duration = 0.5  # in seconds
+animation_duration = 1  # per detik
 
-# Music file (replace 'music.mp3' with the path to your music file)
 music_file = 'music.mp3'
 
-# Load music and play it
 pygame.mixer.music.load(music_file)
 pygame.mixer.music.play(-1)  # -1 means play indefinitely
 
-# Volume control variables
-volume = 0.5  # initial volume
+volume = 0.5
 pygame.mixer.music.set_volume(volume)
-volume_icon = pygame.image.load('volume_icon.png')  # replace with your volume icon
+volume_icon = pygame.image.load('volume_icon.png')
 volume_step = 0.5
 
-# Rotation variables for volume icon
-rotate_angle = 0  # initial rotation angle
+rotate_angle = 0
 
-# Transition variables
+
 target_rect_y = HEIGHT // 2 + selected_menu
 current_rect_y = target_rect_y
 
-# Main loop
 running = True
 menu = None
 cursor_position = []
@@ -295,6 +287,7 @@ while running:
                 screen.fill(BLACK)
             text = 'Tekan enter untuk memilih menu\nTekan panah atas/bawah untuk navigasi menu\nTekan panah kiri/kanan untuk kontrol volume\nKlik kiri mouse untuk membuat garis\nKetik angka 1-5 untuk menjawab pertanyaan\nTekan backspace untuk kembali ke menu'
             draw_text = [pygame.font.Font(None, 36).render(line, True, WHITE) for line in text.split('\n')]
+            
             for i, render_line in enumerate(draw_text):
                 draw_text_rect = render_line.get_rect(center=(WIDTH // 2, (HEIGHT // 2 - 100) + i * 50))
                 surface.blit(render_line, draw_text_rect)
@@ -328,18 +321,19 @@ while running:
         for i, option in enumerate(menu_options):
             text = font.render(option, True, WHITE if i != selected_menu else RED)
 
-            # Calculate animation scale based on a sine function for the selected menu
+            # Animasi teks berdenyut
             if i == selected_menu:
-                animation_scale = 1 + 0.1 * math.sin(animation_time * 2 * math.pi / animation_duration)
+                animation_scale = 1 + 0.1 * math.sin(animation_time *2* math.pi / animation_duration)
+                # animation_scale = 1.3 # no text beat animation
                 text = pygame.transform.scale(text, (int(text.get_width() * animation_scale),
                                                     int(text.get_height() * animation_scale)))
 
             text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + i * 50))
 
-            # Draw the rectangle background for the selected menu
+            # Kotak merah
             if i == selected_menu:
-                rect_width = int(1.2 * text.get_width())
-                rect_height = text.get_height()
+                rect_width = int(text.get_width()+10)
+                rect_height = text.get_height() + 5
                 rect_x = WIDTH // 2 - rect_width // 2
                 rect_y = int(current_rect_y) - rect_height // 2
 
@@ -350,6 +344,7 @@ while running:
         # Interpolasi posisi untuk transisi
         target_rect_y = HEIGHT // 2 + selected_menu * 50
         current_rect_y += (target_rect_y - current_rect_y) * 0.1
+        # current_rect_y += (target_rect_y - current_rect_y) # no red rect animation
 
         
         # rotated_volume_icon = pygame.transform.rotate(volume_icon, rotate_angle)

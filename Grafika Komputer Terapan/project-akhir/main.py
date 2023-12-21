@@ -5,10 +5,6 @@ import random
 
 pygame.init()
 
-<<<<<<< HEAD
-# Constants
-=======
->>>>>>> d8009a41904cff26e20ac66cf41ba471d0c0e896
 WIDTH, HEIGHT = 600, 600
 FPS = 60
 
@@ -35,12 +31,12 @@ menu_options = ['Start', 'Cara Bermain', 'About', 'Exit']
 selected_menu = 0
 
 animation_time = 0
-animation_duration = 1  # per detik
+animation_duration = 1
 
 music_file = 'music.mp3'
 
 pygame.mixer.music.load(music_file)
-pygame.mixer.music.play(-1)  # -1 means play indefinitely
+pygame.mixer.music.play(-1)  # -1 mainkan terus
 
 volume = 0.5
 pygame.mixer.music.set_volume(volume)
@@ -324,7 +320,7 @@ while running:
             # Animasi teks berdenyut
             if i == selected_menu:
                 animation_scale = 1 + 0.1 * math.sin(animation_time *2* math.pi / animation_duration)
-                # animation_scale = 1.3 # no text beat animation
+                # animation_scale = 1.3 # no text beat/pulse animation
                 text = pygame.transform.scale(text, (int(text.get_width() * animation_scale),
                                                     int(text.get_height() * animation_scale)))
 
@@ -349,6 +345,7 @@ while running:
         
         # rotated_volume_icon = pygame.transform.rotate(volume_icon, rotate_angle)
         rotated_volume_icon = pygame.transform.rotozoom(volume_icon, rotate_angle, 1)
+        # rotated_volume_icon = volume_icon
 
         volume_icon_rect = rotated_volume_icon.get_rect(center=(WIDTH - 70, HEIGHT - 70))
         screen.blit(rotated_volume_icon, volume_icon_rect)

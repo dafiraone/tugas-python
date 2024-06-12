@@ -1,6 +1,7 @@
 import numpy as np
 import glm
 import pygame as pg
+import os
 
 class Cube:
     def __init__(self, app):
@@ -10,7 +11,7 @@ class Cube:
         self.shader_program = self.get_shader_program('default') # nama shader
         self.vao = self.get_vao()
         self.m_model = self.get_model_matrix()
-        self.texture = self.get_texture(path='textures/img.png')
+        self.texture = self.get_texture(path=f'{os.path.dirname(os.path.realpath(__file__))}/textures/img.png')
         self.on_init()
     
     # load texture untuk gambar kotak kayu
@@ -124,10 +125,10 @@ class Cube:
     
     # memanggil program shader
     def get_shader_program(self, shader_name):
-        with open(f'shaders/{shader_name}.vert') as file:
+        with open(f'{os.path.dirname(os.path.realpath(__file__))}/shaders/{shader_name}.vert') as file:
             vertex_shader = file.read()
 
-        with open(f'shaders/{shader_name}.frag') as file:
+        with open(f'{os.path.dirname(os.path.realpath(__file__))}/shaders/{shader_name}.frag') as file:
             fragment_shader = file.read()
         
         # compile shader di cpu agar bisa digunakan di gpu

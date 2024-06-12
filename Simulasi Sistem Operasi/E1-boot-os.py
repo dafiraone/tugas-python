@@ -8,9 +8,14 @@ from datetime import datetime
 import timeit
 import os
 
+SYSTEM_DATETIME = None
+SYSTEM_NEWDATETIME = datetime.now()
+SYSTEM_ON = True
+SYSTEM_UPTIME = timeit.default_timer()
+
 def loading_ok(message):
     for i in range(101):
-        print(f'{message}'.ljust(40), end='')
+        print(f'{message}'.ljust(70), end='')
         print(f'{i}'.rjust(10), end='')
         print('%', end='')
         if i < 10:
@@ -37,13 +42,12 @@ def os_booting():
     global OS_NAME
     sleep(0.3)
     print('Starting Power-On Self-Test (POST)')
-    loading_ok('Verifying CPU')
-    loading_ok('Motherboard Test')
-    loading_ok('PCI Bus Test')
-    loading_ok('RAM Test')
-    loading_ok('Storage Drive Test')
-    loading_ok('Graphic Card Test')
-    loading_ok('I/O Port Test')
+    loading_ok(f"Verifying CPU - {HARDWARE['CPU']['name']}")
+    loading_ok(f"Motherboard Test - {HARDWARE['Motherboard']['name']}")
+    loading_ok(f"Memory Test - {HARDWARE['Memory']['name']}")
+    loading_ok(f"I/O Port Test")
+    loading_ok(f"Storage Drive Test - {HARDWARE['SSD']['name']} & {HARDWARE['HDD']['name']}")
+    loading_ok(f"Graphic Card Test - {HARDWARE['Graphic Card']['name']}")
 
     loading_rotate('Booting OS')
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -74,14 +78,7 @@ def os_booting():
 
     print('\nKetik help untuk melihat perintah yang tersedia\n')
 
-
-
 os_booting()
-
-SYSTEM_DATETIME = None
-SYSTEM_NEWDATETIME = datetime.now()
-SYSTEM_ON = True
-SYSTEM_UPTIME = timeit.default_timer()
 
 while SYSTEM_ON is True:
     try:
@@ -161,9 +158,9 @@ while SYSTEM_ON is True:
                                 else:
                                     print('Password Salah')
                             case 'pcinfo':
-                                for spec in PC_INFO:
+                                for spec in HARDWARE:
                                     print(f'{spec}'.ljust(30), end='')
-                                    print(PC_INFO[spec]['name'].rjust(10))
+                                    print(HARDWARE[spec]['name'].rjust(10))
                             case _:
                                 raise CommandNotValidError(f'{list_to_string(command_input)} {console_colors.FAIL}bukan perintah yang valid!{console_colors.ENDC}')
                 case 'time':

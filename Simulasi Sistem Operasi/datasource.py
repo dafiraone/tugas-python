@@ -40,7 +40,7 @@ COMMAND = {
     'dir del {directory}' : 'Menghapus direktori yang dituju',
 }
 
-PC_INFO = {
+HARDWARE = {
     'Motherboard' : {'name': 'MSI PRO B660M-A WIFI DDR4'},
     'CPU' : {'name': 'Intel i5-12400F'},
     'Memory' : {'name': 'Corsair Vengeance LPX 16GB (2x8GB)'},

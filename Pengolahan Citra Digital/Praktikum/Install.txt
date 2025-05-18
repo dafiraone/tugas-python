@@ -1,0 +1,2 @@
+Install CMake, 
+dlib (zip from github) and setup.py install
